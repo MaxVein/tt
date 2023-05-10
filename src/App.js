@@ -27,6 +27,7 @@ function App() {
   const searchHandler = (event) => {
     const searchValue = event.target.value;
     setInputValue(searchValue.length ? searchValue : DEFAULT_SEARCH_VALUE);
+    dispatch(setCurrentPage(1));
   };
 
   const pageChangeHandler = (page) => {
