@@ -8,7 +8,7 @@ export const searchRepositories = async (input, page = 1, perPage = 20) => {
   const queryPage = `&page=${page}`;
   const queryString = queryTerm + queryPerPage + queryPage;
 
-  let url = `https://api.github.com/search/repositories?${queryString}`;
+  const url = `https://api.github.com/search/repositories?${queryString}`;
 
   return await axios.get(url).then((res) => res.data);
 };
