@@ -1,29 +1,35 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { searchRepositories } from "../services/RepositoryService";
+
+export const getRepositories = createAsyncThunk(
+  "repos/getRepositories",
+  async ({ input, page }) => {
+    const { data } = await searchRepositories(input, page);
+    return data;
+  }
+);
 
 export const reposSlice = createSlice({
   name: "repos",
   initialState: {
-    currentPage: 1,
     loading: true,
     data: {
       total_count: 0,
       items: [],
     },
   },
-  reducers: {
-    setCurrentPage(state, action) {
-      state.currentPage = action.payload;
+  extraReducers: {
+    [getRepositories.pending]: (state) => {
+      state.loading = true;
     },
-    setLoadingStatus(state, action) {
-      state.loading = action.payload;
-    },
-    setRepositories(state, action) {
+    [getRepositories.fulfilled]: (state, action) => {
       state.data = action.payload;
+      state.loading = false;
+    },
+    [getRepositories.rejected]: (state) => {
+      state.loading = false;
     },
   },
 });
-
-export const { setCurrentPage, setLoadingStatus, setRepositories } =
-  reposSlice.actions;
 
 export default reposSlice.reducer;
